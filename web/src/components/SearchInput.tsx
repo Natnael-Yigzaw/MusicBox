@@ -6,6 +6,7 @@ import { FaUpload } from "react-icons/fa";
 interface SearchInputProps {
   placeholder?: string;
   onSearch: (value: string) => void;
+  onUploadClick: () => void;
 }
 
 const SearchUploadContainer = styled.div`
@@ -28,7 +29,7 @@ const InputContainer = styled.div`
   flex-grow: 1;
   border-radius: 50px;
   padding: 6px;
-  background-color: #fff;
+  background-color: rgb(255,255,255,0.9);
 
   @media (max-width: 768px) {
     max-width: 75%;
@@ -37,6 +38,7 @@ const InputContainer = styled.div`
 
 const Input = styled.input`
   border: none;
+  width: 100%;
   outline: none;
   font-size: 14px;
   padding: 8px;
@@ -70,6 +72,7 @@ const UploadButton = styled.button`
 const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = "Search...",
   onSearch,
+  onUploadClick,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -88,7 +91,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputContainer>
-      <UploadButton>
+      <UploadButton onClick={onUploadClick}>
         <FaUpload style={{ marginRight: "8px" }} /> Upload
       </UploadButton>
     </SearchUploadContainer>

@@ -1,26 +1,14 @@
-import React from "react";
-import Sidebar from "../components/SideBar";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchInput from "../components/SearchInput";
 import MusicCard from "../components/MusicCard";
-import { FaHome } from "react-icons/fa";
-import { BsInfoCircle } from "react-icons/bs";
-import { PiMusicNotesPlusFill } from "react-icons/pi";
-import { FcMusic } from "react-icons/fc";
-import { IoStatsChartSharp } from "react-icons/io5";
+import UploadSongForm from "../components/UploadSongForm";
 import styled from "@emotion/styled";
 
 const PageContainer = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
-`;
-
-const SidebarWrapper = styled.div`
-  width: 250px;
-  z-index: 2;
-  @media (max-width: 768px) {
-    width: 0;
-  }
 `;
 
 const MainContent = styled.div`
@@ -78,20 +66,8 @@ const CardGrid = styled.div`
 `;
 
 const Home: React.FC = () => {
-  const sidebarItems = [
-    { label: "Home", icon: <FaHome size={24} />, path: "/" },
-    {
-      label: "Add Song",
-      icon: <PiMusicNotesPlusFill size={24} />,
-      path: "/add-song",
-    },
-    {
-      label: "Statistics",
-      icon: <IoStatsChartSharp size={24} />,
-      path: "/statistics",
-    },
-    { label: "About", icon: <BsInfoCircle size={24} />, path: "/about" },
-  ];
+  const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
+  const navigate = useNavigate();
 
   const mockSongs = [
     {
@@ -99,56 +75,49 @@ const Home: React.FC = () => {
         "https://www.okayafrica.com/media-library/rophnan-sidist.jpg?id=30180718&width=1245&height=700&quality=85&coordinates=0%2C437%2C0%2C437",
       title: "Shegiye",
       artist: "Rophnan",
-    },
+    }, 
   ];
 
   const handleSearch = (value: string) => {
     console.log("Search term:", value);
   };
 
-  const handleEdit = (songTitle: string) => {
-    console.log("Edit song:", songTitle);
-  };
-
-  const handleDelete = (songTitle: string) => {
-    console.log("Delete song:", songTitle);
-  };
-
-  const handlePlay = (songTitle: string) => {
-    console.log("Play song:", songTitle);
+  const handleUploadClick = () => {
+    setIsUploadFormVisible((prev) => !prev);
+    navigate("/upload");
   };
 
   return (
     <PageContainer>
-      <SidebarWrapper>
-        <Sidebar
-          headerLabel="Music Box"
-          headerIcon={<FcMusic size={32} />}
-          items={sidebarItems}
-        />
-      </SidebarWrapper>
       <MainContent>
-        <FixedTopSection>
-          <SearchInput
-            placeholder="What do you want to play?"
-            onSearch={handleSearch}
-          />
-        </FixedTopSection>
-        <ScrollableContent>
-          <CardGrid>
-            {mockSongs.map((song) => (
-              <MusicCard
-                key={song.title}
-                coverImage={song.coverImage}
-                title={song.title}
-                artist={song.artist}
-                onEdit={() => handleEdit(song.title)}
-                onDelete={() => handleDelete(song.title)}
-                onPlay={() => handlePlay(song.title)}
+        {isUploadFormVisible ? (
+          <UploadSongForm />
+        ) : (
+          <>
+            <FixedTopSection>
+              <SearchInput
+                placeholder="What do you want to play?"
+                onSearch={handleSearch}
+                onUploadClick={handleUploadClick}
               />
-            ))}
-          </CardGrid>
-        </ScrollableContent>
+            </FixedTopSection>
+            <ScrollableContent>
+              <CardGrid>
+                {mockSongs.map((song) => (
+                  <MusicCard
+                    key={song.title}
+                    coverImage={song.coverImage}
+                    title={song.title}
+                    artist={song.artist}
+                    onEdit={() => console.log("Edit song:", song.title)}
+                    onDelete={() => console.log("Delete song:", song.title)}
+                    onPlay={() => console.log("Play song:", song.title)}
+                  />
+                ))}
+              </CardGrid>
+            </ScrollableContent>
+          </>
+        )}
       </MainContent>
     </PageContainer>
   );
