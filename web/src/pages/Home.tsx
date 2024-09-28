@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SearchInput from "../components/SearchInput";
 import MusicCard from "../components/MusicCard";
 import UploadSongForm from "../components/UploadSongForm";
+import ExplorePage from "../pages/Explore";
 import styled from "@emotion/styled";
 
 const PageContainer = styled.div`
@@ -67,6 +68,7 @@ const CardGrid = styled.div`
 
 const Home: React.FC = () => {
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
+  const [isExploreVisible, setIsExploreVisible] = useState(false);
   const navigate = useNavigate();
 
   const mockSongs = [
@@ -75,7 +77,7 @@ const Home: React.FC = () => {
         "https://www.okayafrica.com/media-library/rophnan-sidist.jpg?id=30180718&width=1245&height=700&quality=85&coordinates=0%2C437%2C0%2C437",
       title: "Shegiye",
       artist: "Rophnan",
-    }, 
+    },
   ];
 
   const handleSearch = (value: string) => {
@@ -84,6 +86,7 @@ const Home: React.FC = () => {
 
   const handleUploadClick = () => {
     setIsUploadFormVisible((prev) => !prev);
+    setIsExploreVisible(false);
     navigate("/upload");
   };
 
@@ -92,6 +95,8 @@ const Home: React.FC = () => {
       <MainContent>
         {isUploadFormVisible ? (
           <UploadSongForm />
+        ) : isExploreVisible ? (
+          <ExplorePage />
         ) : (
           <>
             <FixedTopSection>
