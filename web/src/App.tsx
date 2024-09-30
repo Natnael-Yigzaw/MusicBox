@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import Home from './pages/Home';
 import Upload from "./pages/Upload";
 import Explore from "./pages/Explore";
+import Statistic from "./pages/Statistic";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/statistics" element={<Statistic />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       </Layout>
     </Router>
