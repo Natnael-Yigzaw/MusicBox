@@ -10,6 +10,7 @@ const {
 const {
   uploadSong,
   getSongs,
+  getSongsByGenre,
   searchSongs,
   updateSong,
   deleteSong,
@@ -39,6 +40,7 @@ router.put(
 );
 router.delete("/songs/:id", deleteSongValidation, validate, deleteSong);
 router.get("/songs", getSongs);
+router.get("/explore/:genre", getSongsByGenre);
 router.get("/songs/search", searchSongs);
 router.get("/songs/analytics", getAnalytics);
 

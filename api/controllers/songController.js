@@ -55,27 +55,48 @@ exports.getSongs = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc      Search songs by title, artist, or album
+// @desc      Fetch songs by genre
+// @route     GET /api/songs/:genre
+// @access    Public
+exports.getSongsByGenre = asyncHandler(async (req, res) => {
+  const { genre } = req.params;
+
+  const songs = await Song.find({ genre: { $regex: new RegExp(genre, "i") } });
+
+  if (songs.length === 0) {
+    return res.json({
+      message: `No songs found for genre: ${genre}`,
+      data: [],
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    count: songs.length,
+    data: songs,
+  });
+});
+
+// @desc      Search songs by title, artist, album or genre
 // @route     GET /api/songs/search
 // @access    Public
 exports.searchSongs = asyncHandler(async (req, res) => {
   const { query } = req.query;
 
-  if (!query || query.trim() === "") {
-    return res.status(400).json({ message: "Search query is required" });
+  let searchResults;
+  if (query && query.trim() !== "") {
+    searchResults = await Song.find({
+      $or: [
+        { title: { $regex: new RegExp(query, "i") } },
+        { artist: { $regex: new RegExp(query, "i") } },
+        { album: { $regex: new RegExp(query, "i") } },
+        { genre: { $regex: new RegExp(query, "i") } },
+      ],
+    });
   }
 
-  const searchResults = await Song.find({
-    $or: [
-      { title: { $regex: new RegExp(query, "i") } },
-      { artist: { $regex: new RegExp(query, "i") } },
-      { album: { $regex: new RegExp(query, "i") } },
-      { genre: { $regex: new RegExp(query, "i") } },
-    ],
-  });
-
-  if (searchResults.length === 0) {
-    return res.status(404).json({ message: "No songs found" });
+  if (!searchResults || searchResults.length === 0) {
+    searchResults = await Song.find();
   }
 
   res.status(200).json({
@@ -161,12 +182,15 @@ exports.getAnalytics = asyncHandler(async (req, res) => {
   const songsByAlbum = await getSongsByAlbum();
 
   res.status(200).json({
-    totalSongs,
-    totalArtists,
-    totalAlbums,
-    totalGenres,
-    songsByGenre,
-    songsByArtist,
-    songsByAlbum,
+    success: true,
+    data: {
+      totalSongs,
+      totalArtists,
+      totalAlbums,
+      totalGenres,
+      songsByGenre,
+      songsByArtist,
+      songsByAlbum,
+    },
   });
 });
