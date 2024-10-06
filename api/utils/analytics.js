@@ -5,23 +5,32 @@ const getTotalSongs = async () => {
 };
 
 const getTotalArtists = async () => {
-  const distinctArtists = await Song.distinct("artist");
-  return distinctArtists.length;
+  const distinctArtists = await Song.aggregate([
+    { $group: { _id: { $toLower: "$artist" } } },
+    { $count: "artistCount" },
+  ]);
+  return distinctArtists.length ? distinctArtists[0].artistCount : 0;
 };
 
 const getTotalAlbums = async () => {
-  const distinctAlbums = await Song.distinct("album");
-  return distinctAlbums.length;
+  const distinctAlbums = await Song.aggregate([
+    { $group: { _id: { $toLower: "$album" } } },
+    { $count: "albumCount" },
+  ]);
+  return distinctAlbums.length ? distinctAlbums[0].albumCount : 0;
 };
 
 const getTotalGenres = async () => {
-  const distinctGenres = await Song.distinct("genre");
-  return distinctGenres.length;
+  const distinctGenres = await Song.aggregate([
+    { $group: { _id: { $toLower: "$genre" } } },
+    { $count: "genreCount" },
+  ]);
+  return distinctGenres.length ? distinctGenres[0].genreCount : 0;
 };
 
 const getSongsByGenre = async () => {
   return await Song.aggregate([
-    { $group: { _id: "$genre", count: { $sum: 1 } } },
+    { $group: { _id: { $toLower: "$genre" }, count: { $sum: 1 } } },
     { $sort: { _id: 1 } },
   ]);
 };
@@ -30,9 +39,9 @@ const getSongsByArtist = async () => {
   return await Song.aggregate([
     {
       $group: {
-        _id: "$artist",
+        _id: { $toLower: "$artist" },
         songCount: { $sum: 1 },
-        albums: { $addToSet: "$album" },
+        albums: { $addToSet: { $toLower: "$album" } },
       },
     },
     {
@@ -49,7 +58,7 @@ const getSongsByArtist = async () => {
 
 const getSongsByAlbum = async () => {
   return await Song.aggregate([
-    { $group: { _id: "$album", count: { $sum: 1 } } },
+    { $group: { _id: { $toLower: "$album" }, count: { $sum: 1 } } },
     { $sort: { _id: 1 } },
   ]);
 };
