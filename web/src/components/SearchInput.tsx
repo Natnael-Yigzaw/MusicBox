@@ -5,7 +5,7 @@ import { FaUpload } from "react-icons/fa";
 
 interface SearchInputProps {
   placeholder?: string;
-  onSearch: (value: string) => void;
+  onSearch: (query: string) => void;
   onUploadClick: () => void;
 }
 
@@ -69,6 +69,10 @@ const UploadButton = styled.button`
   }
 `;
 
+const SearchIcon = styled(CiSearch)`
+  cursor: pointer;
+`;
+
 const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = "Search...",
   onSearch,
@@ -80,15 +84,26 @@ const SearchInput: React.FC<SearchInputProps> = ({
     onSearch(searchTerm);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <SearchUploadContainer>
       <InputContainer>
-        <CiSearch size={20} onClick={handleSearch} />
+        <SearchIcon
+          size={20}
+          onClick={handleSearch}
+        />
         <Input
           type="text"
+          id="searchInput"
           value={searchTerm}
           placeholder={placeholder}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </InputContainer>
       <UploadButton onClick={onUploadClick}>
