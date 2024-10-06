@@ -51,3 +51,38 @@ export const searchSongs = async (query: string): Promise<{
   });
   return response.data;
 };
+
+export const exploreGenre = async ( genre: string): Promise<{
+  success: boolean;
+  count: number;
+  data: Song[];
+}> => {
+  const response = await axios.get(`${API_BASE_URL}/${genre}`);
+  return response.data;
+};
+
+export const fetchStatistics = async (): Promise<{
+  success: boolean;
+  data: {
+    totalSongs: number;
+    totalArtists: number;
+    totalAlbums: number;
+    totalGenres: number;
+    songsByGenre: {
+      _id: string;
+      count: number;
+    }[];
+    songsByArtist: {
+      songCount: number;
+      artist: string;
+      albumCount: number;
+    }[];
+    songsByAlbum: {
+      _id: string;
+      count: number;
+    }[];
+  };
+}> => {
+  const response = await axios.get(`${API_BASE_URL}/analytics`);
+  return response.data;
+};

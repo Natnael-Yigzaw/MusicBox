@@ -11,8 +11,9 @@ import { toast } from "react-toastify";
 import SearchInput from "../components/SearchInput";
 import MusicCard from "../components/MusicCard";
 import Loader from "../components/Loader";
-import styled from "@emotion/styled";
 import Player from "../components/Player";
+import Alert from "../components/Alert";
+import styled from "@emotion/styled";
 
 const PageContainer = styled.div`
   display: flex;
@@ -71,49 +72,6 @@ const CardGrid = styled.div`
 
   @media (max-width: 480px) {
     grid-template-columns: repeat(2, 1fr);
-  }
-`;
-
-const StyledAlert = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #1c1c1c;
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  width: 300px;
-  text-align: center;
-
-  h3 {
-    margin-bottom: 5px;
-  }
-
-  button {
-    margin: 0 5px;
-    padding: 10px 20px;
-    background-color: #ff4757;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: #ff6b81;
-    }
-  }
-
-  .cancel-button {
-    background-color: #ccc;
-    color: #333;
-
-    &:hover {
-      background-color: #bbb;
-    }
   }
 `;
 
@@ -244,14 +202,12 @@ const Home: React.FC = () => {
           )}
         </ScrollableContent>
         {isAlertVisible && (
-          <StyledAlert>
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete this song?</p>
-            <button onClick={confirmDelete}>Yes</button>
-            <button className="cancel-button" onClick={cancelDelete}>
-              Cancel
-            </button>
-          </StyledAlert>
+          <Alert
+            title="Confirm Delete"
+            message="Are you sure you want to delete this song?"
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
         )}
         <Player currentSong={currentSong} onEnded={handlePlayerEnded} />
       </MainContent>

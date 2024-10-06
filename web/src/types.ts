@@ -21,3 +21,16 @@ export interface SongsState {
   loading: boolean;
   error: string | null;
 }
+
+export interface SongStatisticsResponse {
+  success: boolean;
+  data: {
+    totalSongs: number;
+    totalArtists: number;
+    totalAlbums: number;
+    totalGenres: number;
+    songsByGenre: { _id: string; count: number }[];
+    songsByArtist: { songCount: number; artist: string; albumCount: number }[];
+    songsByAlbum: { _id: string; count: number }[];
+  };
+}

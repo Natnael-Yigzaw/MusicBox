@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../store/index";
 import OverviewCard from "../components/OverviewStatisticCard";
 import SongStatisticCard from "../components/SongStatisticCard";
 import ArtistStatisticCard from "../components/ArtistStatisticCard";
 import AlbumStatisticCard from "../components/AlbumStatisticCard";
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
+import { fetchStatisticsRequest } from '../store/slices/songSlice';
 
 const StatisticsContainer = styled.div`
   display: flex;
@@ -47,24 +52,20 @@ const ScrollableContent = styled.div`
 `;
 
 const StatisticsPage: React.FC = () => {
-  const sampleData = {
-    totalSongs: 1,
-    totalArtists: 1,
-    totalAlbums: 1,
-    totalGenres: 1,
-    songsByGenre: [
-      { _id: "Rock", count: 1 },
-      { _id: "Pop", count: 1 },
-      { _id: "Jazz", count: 2 },
-      { _id: "Electronic", count: 1 },
-    ],
-    songsByArtist: [
-      { artist: "Rophnan", songCount: 1, albumCount: 1 },
-    ],
-    songsByAlbum: [
-      { _id: "SIDIST", count: 1 }
-    ]
-  };
+  const dispatch = useDispatch();
+  const { statistics, loading, error } = useSelector(
+    (state: RootState) => state.songs
+  );
+
+  useEffect(() => {
+    dispatch(fetchStatisticsRequest());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   return (
     <StatisticsContainer>
@@ -72,15 +73,23 @@ const StatisticsPage: React.FC = () => {
         Statistics
       </FixedTopSection>
       <ScrollableContent>
-        <OverviewCard
-          totalSongs={sampleData.totalSongs}
-          totalArtists={sampleData.totalArtists}
-          totalAlbums={sampleData.totalAlbums}
-          totalGenres={sampleData.totalGenres}
-        />
-        <SongStatisticCard songsByGenre={sampleData.songsByGenre} />
-        <ArtistStatisticCard songsByArtist={sampleData.songsByArtist} />
-        <AlbumStatisticCard songsByAlbum={sampleData.songsByAlbum} />
+        {loading ? (
+          <Loader />
+        ) : (
+          statistics && (
+            <>
+              <OverviewCard
+                totalSongs={statistics.totalSongs}
+                totalArtists={statistics.totalArtists}
+                totalAlbums={statistics.totalAlbums}
+                totalGenres={statistics.totalGenres}
+              />
+              <SongStatisticCard songsByGenre={statistics.songsByGenre} />
+              <ArtistStatisticCard songsByArtist={statistics.songsByArtist} />
+              <AlbumStatisticCard songsByAlbum={statistics.songsByAlbum} />
+            </>
+          )
+        )}
       </ScrollableContent>
     </StatisticsContainer>
   );
