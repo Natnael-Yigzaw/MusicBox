@@ -5,10 +5,10 @@ const Card = styled.div<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor};
   border-radius: 15px;
   overflow: hidden;
-  width: 120px;
-  height: 120px;
+  max-width: 60%;
+  height: 100%;
   position: relative;
-  padding: 20px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -22,7 +22,7 @@ const Card = styled.div<{ bgColor: string }>`
 
 const GenreTitle = styled.h3`
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
 `;
 
@@ -30,8 +30,8 @@ const GenreImage = styled.img`
   position: absolute;
   bottom: -10px;
   right: -5px;
-  width: 80px;
-  height: 80px;
+  width: 65px;
+  height: 65px;
   border-radius: 15px;
   transform: rotate(30deg);
 `;

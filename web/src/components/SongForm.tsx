@@ -11,6 +11,14 @@ const FormWrapper = styled.div`
   border-radius: 20px;
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 768px) {
+    padding: 20px 40px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px 45px;
+  }
 `;
 
 const FormField = styled.div`
@@ -36,6 +44,11 @@ const Input = styled(Field)`
     outline: none;
     border: 2px solid #A5D6A7;
   }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    padding: 8px;
+  }
 `;
 
 const Select = styled(Field)`
@@ -52,6 +65,11 @@ const Select = styled(Field)`
   &:focus {
     outline: none;
     border: 2px solid #A5D6A7;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    padding: 8px;
   }
 `;
 
@@ -82,6 +100,11 @@ const SubmitButton = styled.button`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 8px;
   }
 `;
 
