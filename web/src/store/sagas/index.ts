@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { watchFetchSongs, watchUploadSong, watchUpdateSong, watchDeleteSong, watchSearchSongs } from './songSaga';
+import { watchFetchSongs, watchUploadSong, watchUpdateSong, watchDeleteSong, watchSearchSongs, watchExploreGenre, watchFetchStatistics } from './songSaga';
 
 function* rootSaga() {
   yield all([
@@ -8,6 +8,8 @@ function* rootSaga() {
     watchUpdateSong(),
     watchDeleteSong(),
     watchSearchSongs(),
+    watchExploreGenre(),
+    watchFetchStatistics()
   ]);
 }
 

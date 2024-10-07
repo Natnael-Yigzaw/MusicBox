@@ -16,9 +16,15 @@ import {
   searchSongsRequest,
   searchSongsSuccess,
   searchSongsFailure,
+  exploreGenreRequest,
+  exploreGenreSuccess,
+  exploreGenreFailure,
+  fetchStatisticsRequest,
+  fetchStatisticsSuccess,
+  fetchStatisticsFailure
 } from '../slices/songSlice';
-import { fetchSongs, uploadSong, updateSong, deleteSong, searchSongs } from '../../api/songApi';
-import { Song } from '../../types';
+import { fetchSongs, uploadSong, updateSong, deleteSong, searchSongs, exploreGenre, fetchStatistics } from '../../api/songApi';
+import { Song, SongStatisticsResponse } from '../../types';
 
 interface FetchSongsResponse {
   success: boolean;
@@ -114,6 +120,33 @@ function* handleSearchSong(action: PayloadAction<string>): Generator<any, void, 
   }
 }
 
+function* handleExploreGenre(action: PayloadAction<string>): Generator<any, void, FetchSongsResponse> {
+  try {
+    const response: FetchSongsResponse = yield call(exploreGenre, action.payload);
+    yield put(exploreGenreSuccess(response.data));
+  } catch (error) {
+    if (error instanceof Error) {
+      yield put(exploreGenreFailure(error.message));
+    } else {
+      yield put(exploreGenreFailure('An unknown error occurred'));
+    }
+  }
+}
+
+function* handleFetchStatistics(): Generator<any, void, SongStatisticsResponse> {
+  try {
+    const response: SongStatisticsResponse = yield call(fetchStatistics);
+    yield put(fetchStatisticsSuccess(response.data));
+  } catch (error) {
+    if (error instanceof Error) {
+      yield put(fetchStatisticsFailure(error.message));
+    } else {
+      yield put(fetchStatisticsFailure('An unknown error occurred'));
+    }
+  }
+}
+
+
 export function* watchFetchSongs() {
   yield takeLatest(fetchSongsRequest.type, handleFetchSongs);
 }
@@ -132,4 +165,12 @@ export function* watchDeleteSong() {
 
 export function* watchSearchSongs() {
   yield takeLatest(searchSongsRequest.type, handleSearchSong);
+}
+
+export function* watchExploreGenre() {
+  yield takeLatest(exploreGenreRequest.type, handleExploreGenre);
+}
+
+export function* watchFetchStatistics() {
+  yield takeLatest(fetchStatisticsRequest.type, handleFetchStatistics);
 }
