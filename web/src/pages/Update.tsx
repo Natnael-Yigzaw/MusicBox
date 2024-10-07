@@ -12,6 +12,22 @@ const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
 `;
 
 const UpdatePage: React.FC = () => {

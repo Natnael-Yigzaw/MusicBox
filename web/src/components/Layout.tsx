@@ -14,7 +14,7 @@ const PageContainer = styled.div`
 
 const SidebarWrapper = styled.div`
   width: 250px;
-  z-index: 2;
+  z-index: 3;
   @media (max-width: 768px) {
     width: 0;
   }
