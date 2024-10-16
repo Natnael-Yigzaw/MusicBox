@@ -1,13 +1,4 @@
 const Song = require("../model/Song");
-const {
-  getTotalSongs,
-  getTotalArtists,
-  getTotalAlbums,
-  getTotalGenres,
-  getSongsByGenre,
-  getSongsByArtist,
-  getSongsByAlbum,
-} = require("../utils/analytics");
 const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
 
@@ -173,13 +164,23 @@ exports.deleteSong = asyncHandler(async (req, res) => {
 // @route     GET /api/analytics
 // @access    Public
 exports.getAnalytics = asyncHandler(async (req, res) => {
-  const totalSongs = await getTotalSongs();
-  const totalArtists = await getTotalArtists();
-  const totalAlbums = await getTotalAlbums();
-  const totalGenres = await getTotalGenres();
-  const songsByGenre = await getSongsByGenre();
-  const songsByArtist = await getSongsByArtist();
-  const songsByAlbum = await getSongsByAlbum();
+  const [
+    totalSongs,
+    totalArtists,
+    totalAlbums,
+    totalGenres,
+    songsByGenre,
+    songsByArtist,
+    songsByAlbum,
+  ] = await Promise.all([
+    Song.getTotalSong(),
+    Song.getTotalArtists(),
+    Song.getTotalAlbums(),
+    Song.getTotalGenres(),
+    Song.getSongsByGenre(),
+    Song.getSongsByArtist(),
+    Song.getSongsByAlbum(),
+  ]);
 
   res.status(200).json({
     success: true,

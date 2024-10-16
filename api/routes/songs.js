@@ -29,11 +29,11 @@ router.post(
 );
 router.put(
   "/songs/:id",
-  removeUpdatedAsset,
   upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "musicFile", maxCount: 1 },
   ]),
+  removeUpdatedAsset,
   updateSongValidation,
   validate,
   updateSong
