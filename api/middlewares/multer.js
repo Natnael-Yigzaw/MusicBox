@@ -30,13 +30,23 @@ const removeUpdatedAsset = async (req, res, next) => {
     return res.status(404).json({ message: "Song not found" });
   }
 
-  if (req.body.coverImage && song.coverImage.public_id) {
+  if (
+    req.files &&
+    req.files.coverImage &&
+    req.files.coverImage.length > 0 &&
+    song.coverImage.public_id
+  ) {
     await cloudinary.uploader.destroy(song.coverImage.public_id, {
       resource_type: "image",
     });
   }
 
-  if (req.body.musicFile && song.musicFile.public_id) {
+  if (
+    req.files &&
+    req.files.musicFile &&
+    req.files.musicFile.length > 0 &&
+    song.musicFile.public_id
+  ) {
     await cloudinary.uploader.destroy(song.musicFile.public_id, {
       resource_type: "raw",
     });
